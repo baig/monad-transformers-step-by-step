@@ -1,4 +1,4 @@
-name:                transformers
+name:                transform
 version:             0.1.0.0
 synopsis:            Short description of your package
 homepage:            https://github.com/githubuser/transformers#readme
@@ -19,9 +19,10 @@ description:         Please see the README on Github at <https://github.com/gith
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Transformers
+  exposed-modules:     Transform
   build-depends:       base >= 4.7 && < 5
                      , containers
+                     , mtl
   default-language:    Haskell2010
 
 executable transformers-exe
@@ -29,7 +30,7 @@ executable transformers-exe
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                     , transformers
+                     , transform
                      , containers
   default-language:    Haskell2010
 
@@ -38,7 +39,7 @@ test-suite transformers-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
-                     , transformers
+                     , transform
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
