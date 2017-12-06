@@ -32,7 +32,9 @@ runEval ev = runIdentity $ runErrorT ev
 
 eval :: Env -> Exp -> Eval Value
 eval _ (Lit i) = return $ IntVal i
-eval env (Var n) = maybe (fail $ "undefined variable: " ++ n) return $ Map.lookup n env
+eval env (Var n) = case Map.lookup n env of
+                        Nothing -> throwError $ "unbound variable" ++ n
+                        Just v -> return v
 eval env (Plus e1 e2) = do e1' <- eval env e1
                            e2' <- eval env e2
                            case (e1', e2') of
