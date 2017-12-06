@@ -10,6 +10,6 @@ exampleExp3 = (App (Lit 4) (Lit 4))
 
 main :: IO ()
 main = do
-    putStrLn $ show $ runEval (eval Map.empty exampleExp1)
-    putStrLn $ show $ runEval (eval Map.empty exampleExp2)
-    putStrLn $ show $ runEval (eval Map.empty exampleExp3)
+    putStrLn $ show $ runEval Map.empty (eval exampleExp1)
+    putStrLn $ show $ runEval Map.empty (eval exampleExp2)
+    putStrLn $ show $ runEval Map.empty (eval exampleExp3)
