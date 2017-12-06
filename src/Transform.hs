@@ -33,14 +33,17 @@ runEval ev = runIdentity $ runErrorT ev
 eval :: Env -> Exp -> Eval Value
 eval _ (Lit i) = return $ IntVal i
 eval env (Var n) = maybe (fail $ "undefined variable: " ++ n) return $ Map.lookup n env
-eval env (Plus e1 e2) = do IntVal i1 <- eval env e1
-                           IntVal i2 <- eval env e2
-                           return $ IntVal (i1 + i2) -- Whenever one of the addition operands evaluates to a non-number, the pattern matching in the let expression will fail, also terminating the program with an error message.
+eval env (Plus e1 e2) = do e1' <- eval env e1
+                           e2' <- eval env e2
+                           case (e1', e2') of
+                              (IntVal i1, IntVal i2) -> return $ IntVal (i1 + i2) -- Whenever one of the addition operands evaluates to a non-number, the pattern matching in the let expression will fail, also terminating the program with an error message.
+                              _ -> throwError "type error"
 eval env (Abs n e) = return $ FunVal env n e
 eval env (App e1 e2) = do funVal <- eval env e1
                           intVal <- eval env e2
                           case funVal of
                                 FunVal env' n body -> eval (Map.insert n intVal env') body -- Function application proceeds similar to addition, by first evaluating the function and the argument. The first ex- pression must evaluate to a functional value, whose body is then evaluated in the captured environment, extended with the binding of the function parameter to the argument value. The case expression used here to deconstruct the functional value introduces another error possibility.
+                                _ -> throwError "type error"
 
 
 
