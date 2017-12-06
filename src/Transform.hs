@@ -3,6 +3,7 @@ module Transform where
 import Data.Maybe
 import qualified Data.Map as Map
 import Control.Monad.Identity
+import Control.Monad.Error
 
 type Name = String
 
@@ -23,11 +24,11 @@ data Value = IntVal Integer
 
 -- In order to use monad transformers, it is necessary to express functions in monadic style. That means that the programmer needs to impose sequencing on all monadic operations using do notation, and to use the return function in order to specify the result of a function.
 -- We define a monad in which the evaluator will be defined. The following type synonym defines Eval α as a synonym for the type Identity α. Identity is a monad imported from Control.Monad.Identity, which is perhaps the simplest monad imaginable: it defines the standard return and >= operations for constructing operations in the monad, and additionally a function runIdentity to execute such operations. Other than that, the identity monad has no effect.
-type Eval a = Identity a
+type Eval a = ErrorT String Identity a
 
 -- For readability, we also define a function runEval1, which simply calls runIdentity.
-runEval :: Eval a -> a
-runEval ev = runIdentity ev
+runEval :: Eval a -> Either String a
+runEval ev = runIdentity $ runErrorT ev
 
 eval :: Env -> Exp -> Eval Value
 eval _ (Lit i) = return $ IntVal i
