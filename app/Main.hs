@@ -8,8 +8,7 @@ exampleExp1 = (Lit 12) `Plus` (App (Abs "x" (Var "x")) (Lit 4 `Plus` Lit 2))
 exampleExp2 = (Plus (Lit 1) (Abs "x" (Var "x")))
 exampleExp3 = (App (Lit 4) (Lit 4))
 
-main :: IO ()
 main = do
-    putStrLn $ show $ runEval Map.empty 0 (eval exampleExp1)
-    putStrLn $ show $ runEval Map.empty 0 (eval exampleExp2)
-    putStrLn $ show $ runEval Map.empty 0 (eval exampleExp3)
+    runEval Map.empty 0 (eval exampleExp1)
+    runEval Map.empty 0 (eval exampleExp2)
+    runEval Map.empty 0 (eval exampleExp3)

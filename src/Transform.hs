@@ -27,11 +27,11 @@ data Value = IntVal Integer
 
 -- In order to use monad transformers, it is necessary to express functions in monadic style. That means that the programmer needs to impose sequencing on all monadic operations using do notation, and to use the return function in order to specify the result of a function.
 -- We define a monad in which the evaluator will be defined. The following type synonym defines Eval α as a synonym for the type Identity α. Identity is a monad imported from Control.Monad.Identity, which is perhaps the simplest monad imaginable: it defines the standard return and >= operations for constructing operations in the monad, and additionally a function runIdentity to execute such operations. Other than that, the identity monad has no effect.
-type Eval a = ReaderT Env (ErrorT String (WriterT [String] (StateT Integer Identity))) a
+type Eval a = ReaderT Env (ErrorT String (WriterT [String] (StateT Integer IO))) a
 
 -- For readability, we also define a function runEval1, which simply calls runIdentity.
-runEval :: Env -> Integer -> Eval a -> ((Either String a, [String]), Integer)
-runEval env st ev = runIdentity $ runStateT (runWriterT $ runErrorT $ runReaderT ev env) st
+runEval :: Env -> Integer -> Eval a -> IO ((Either String a, [String]), Integer)
+runEval env st ev = runStateT (runWriterT $ runErrorT $ runReaderT ev env) st
 
 tick :: (Num s, MonadState s m) => m ()
 tick = do
@@ -40,6 +40,7 @@ tick = do
 
 eval :: Exp -> Eval Value
 eval (Lit i) = do tick
+                  liftIO $ print i
                   return $ IntVal i
 eval (Var n) = do tick
                   tell [n]
