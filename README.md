@@ -1,6 +1,3 @@
-# transformers
+# Monad Transformers Step by Step
 
-A personal walk-thru of the monad transformers step by step.
-The goal is to implement the lambda calculus interpreter while reading the article
-to develop a stronger understanding of the monad transformer stack.
-
+Based on [this article](https://page.mi.fu-berlin.de/scravy/realworldhaskell/materialien/monad-transformers-step-by-step.pdf) by Martin Grabmüller.
